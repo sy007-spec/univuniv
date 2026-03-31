@@ -5,7 +5,7 @@ import { programs } from '@/data/programs'
 import { schools } from '@/data/schools'
 import { newsItems } from '@/data/news'
 import { PathwayCard } from '@/components/PathwayCard'
-import { PATHWAY_CATEGORY_LABELS } from '@/types'
+import { useI18n } from '@/i18n'
 import type { PathwayCategory } from '@/types'
 
 const CATEGORIES: PathwayCategory[] = [
@@ -17,6 +17,8 @@ const CATEGORIES: PathwayCategory[] = [
 ]
 
 export function HomePage() {
+  const { lang, categoryLabel } = useI18n()
+  const zh = lang === 'zh'
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
 
@@ -37,13 +39,16 @@ export function HomePage() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              Discover <span className="gradient-text">22+ Pathways</span> to
-              China's Top Universities
+              {zh ? (
+                <>发现通往名校的 <span className="gradient-text">22+ 条路径</span></>
+              ) : (
+                <>Discover <span className="gradient-text">22+ Pathways</span> to China's Top Universities</>
+              )}
             </h1>
             <p>
-              95% of parents think Gaokao is the only way. In reality, 60% of students
-              at top universities entered through alternative admission pathways.
-              We help you find and understand every opportunity.
+              {zh
+                ? '95% 家长以为高考是唯一道路。实际上，名校中有大量学生通过多元升学路径录取。我们帮助你快速看清每一种机会。'
+                : '95% of parents think Gaokao is the only way. We help you discover every alternative opportunity.'}
             </p>
 
             <form onSubmit={handleSearch} className="search-box">
@@ -55,7 +60,7 @@ export function HomePage() {
               </span>
               <input
                 type="text"
-                placeholder="Search pathways, schools, programs..."
+                placeholder={zh ? '搜索路径、学校、项目...' : 'Search pathways, schools, programs...'}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -64,19 +69,19 @@ export function HomePage() {
             <div className="hero-stats">
               <div className="hero-stat">
                 <div className="hero-stat-number">{pathways.length}+</div>
-                <div className="hero-stat-label">Pathways</div>
+                <div className="hero-stat-label">{zh ? '升学路径' : 'Pathways'}</div>
               </div>
               <div className="hero-stat">
                 <div className="hero-stat-number">{schools.length}</div>
-                <div className="hero-stat-label">Schools</div>
+                <div className="hero-stat-label">{zh ? '学校' : 'Schools'}</div>
               </div>
               <div className="hero-stat">
                 <div className="hero-stat-number">{currentYearPrograms.length}</div>
-                <div className="hero-stat-label">2026 Programs</div>
+                <div className="hero-stat-label">{zh ? '2026项目' : '2026 Programs'}</div>
               </div>
               <div className="hero-stat">
                 <div className="hero-stat-number">{uniqueSchoolCount}</div>
-                <div className="hero-stat-label">Universities</div>
+                <div className="hero-stat-label">{zh ? '院校数量' : 'Universities'}</div>
               </div>
             </div>
           </div>
@@ -87,9 +92,9 @@ export function HomePage() {
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Explore by Category</h2>
+            <h2 className="section-title">{zh ? '按类别浏览' : 'Explore by Category'}</h2>
             <p className="section-subtitle">
-              Beyond Gaokao — discover the full spectrum of admission pathways
+              {zh ? '高考之外，还有更多升学通道' : 'Beyond Gaokao — discover the full spectrum of admission pathways'}
             </p>
           </div>
           <div className="grid grid-3" style={{ gap: 12 }}>
@@ -119,7 +124,7 @@ export function HomePage() {
                     </div>
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>
-                        {PATHWAY_CATEGORY_LABELS[cat]}
+                        {categoryLabel(cat)}
                       </div>
                       <div
                         style={{
@@ -127,7 +132,7 @@ export function HomePage() {
                           color: 'var(--color-text-muted)',
                         }}
                       >
-                        {count} pathway{count !== 1 ? 's' : ''}
+                        {zh ? `${count} 条路径` : `${count} pathway${count !== 1 ? 's' : ''}`}
                       </div>
                     </div>
                   </div>
@@ -142,9 +147,9 @@ export function HomePage() {
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Featured Pathways</h2>
+            <h2 className="section-title">{zh ? '热门路径' : 'Featured Pathways'}</h2>
             <p className="section-subtitle">
-              Most popular alternative admission routes for 2026
+              {zh ? '2026 年高关注度多元升学路线' : 'Most popular alternative admission routes for 2026'}
             </p>
           </div>
           <div className="grid grid-3">
@@ -154,7 +159,7 @@ export function HomePage() {
           </div>
           <div style={{ textAlign: 'center', marginTop: 32 }}>
             <Link to="/pathways" className="btn btn-outline">
-              View All Pathways →
+              {zh ? '查看全部路径' : 'View All Pathways →'}
             </Link>
           </div>
         </div>
@@ -164,16 +169,16 @@ export function HomePage() {
       <section className="section" style={{ background: 'var(--color-bg-card)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Latest Updates</h2>
+            <h2 className="section-title">{zh ? '最新动态' : 'Latest Updates'}</h2>
             <p className="section-subtitle">
-              Stay informed with the latest admission news and policy changes
+              {zh ? '及时了解最新政策与录取资讯' : 'Stay informed with the latest admission news and policy changes'}
             </p>
           </div>
           <div className="grid grid-2">
             {newsItems.slice(0, 4).map((item) => (
               <div key={item.id} className="news-item" style={{ padding: '0 0 20px' }}>
                 <div className="news-date">
-                  {new Date(item.date).toLocaleDateString('en-US', {
+                  {new Date(item.date).toLocaleDateString(zh ? 'zh-CN' : 'en-US', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
@@ -190,7 +195,7 @@ export function HomePage() {
           </div>
           <div style={{ textAlign: 'center', marginTop: 24 }}>
             <Link to="/news" className="btn btn-outline">
-              All News →
+              {zh ? '查看全部资讯' : 'All News →'}
             </Link>
           </div>
         </div>
@@ -214,7 +219,7 @@ export function HomePage() {
               letterSpacing: '-0.02em',
             }}
           >
-            Don't Let Information Gaps Limit Your Child's Future
+            {zh ? '不要让信息差限制孩子的未来' : "Don't Let Information Gaps Limit Your Child's Future"}
           </h2>
           <p
             style={{
@@ -224,15 +229,14 @@ export function HomePage() {
               margin: '0 auto 32px',
             }}
           >
-            Start exploring alternative pathways today. Filter by year, school type,
-            QS ranking, tuition, and more.
+            {zh ? '现在开始探索多元升学路径，按年份、学校、QS、学费等维度精准筛选。' : 'Start exploring alternative pathways today.'}
           </p>
           <div className="btn-group" style={{ justifyContent: 'center' }}>
             <Link to="/programs" className="btn btn-lg" style={{ background: 'white', color: 'var(--color-primary)' }}>
-              Browse Programs
+              {zh ? '浏览项目' : 'Browse Programs'}
             </Link>
             <Link to="/pathways" className="btn btn-lg btn-secondary">
-              Explore Pathways
+              {zh ? '探索路径' : 'Explore Pathways'}
             </Link>
           </div>
         </div>

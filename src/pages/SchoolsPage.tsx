@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { schools } from '@/data/schools'
 import { programs } from '@/data/programs'
 import { SchoolCard } from '@/components/SchoolCard'
-import { SCHOOL_TYPE_LABELS } from '@/types'
+import { useI18n } from '@/i18n'
 import type { SchoolType } from '@/types'
 
 const SCHOOL_TYPES: SchoolType[] = [
@@ -17,6 +17,8 @@ const SCHOOL_TYPES: SchoolType[] = [
 ]
 
 export function SchoolsPage() {
+  const { lang, schoolTypeLabel } = useI18n()
+  const zh = lang === 'zh'
   const [searchQuery, setSearchQuery] = useState('')
   const [schoolType, setSchoolType] = useState<SchoolType | 'all'>('all')
   const [tierFilter, setTierFilter] = useState<'all' | 'c9' | '985' | '211' | 'dfc'>('all')
@@ -52,10 +54,10 @@ export function SchoolsPage() {
       <section className="detail-hero">
         <div className="container">
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: 8 }}>
-            Schools
+            {zh ? '院校库' : 'Schools'}
           </h1>
           <p style={{ opacity: 0.8, fontSize: '1.1rem', maxWidth: 600 }}>
-            Browse universities by type, tier, QS ranking, and more
+            {zh ? '按类型、层级、QS 排名等筛选院校' : 'Browse universities by type, tier, QS ranking, and more'}
           </p>
         </div>
       </section>
@@ -65,17 +67,17 @@ export function SchoolsPage() {
           <div className="filter-bar">
             <div className="filter-row">
               <div className="filter-group" style={{ minWidth: 240 }}>
-                <label className="filter-label">Search</label>
+                <label className="filter-label">{zh ? '搜索' : 'Search'}</label>
                 <input
                   className="filter-input"
                   type="text"
-                  placeholder="School name, city..."
+                  placeholder={zh ? '学校名称、城市...' : 'School name, city...'}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="filter-group" style={{ minWidth: 160 }}>
-                <label className="filter-label">Type</label>
+                <label className="filter-label">{zh ? '类型' : 'Type'}</label>
                 <select
                   className="filter-select"
                   value={schoolType}
@@ -83,10 +85,10 @@ export function SchoolsPage() {
                     setSchoolType(e.target.value as SchoolType | 'all')
                   }
                 >
-                  <option value="all">All Types</option>
+                  <option value="all">{zh ? '全部类型' : 'All Types'}</option>
                   {SCHOOL_TYPES.map((t) => (
                     <option key={t} value={t}>
-                      {SCHOOL_TYPE_LABELS[t]}
+                      {schoolTypeLabel(t)}
                     </option>
                   ))}
                 </select>
@@ -133,14 +135,13 @@ export function SchoolsPage() {
               color: 'var(--color-text-secondary)',
             }}
           >
-            Showing <strong>{filteredSchools.length}</strong> school
-            {filteredSchools.length !== 1 ? 's' : ''}
+            {zh ? '共找到' : 'Showing'} <strong>{filteredSchools.length}</strong> {zh ? '所学校' : `school${filteredSchools.length !== 1 ? 's' : ''}`}
           </div>
 
           {filteredSchools.length === 0 ? (
             <div className="empty-state">
-              <h3>No schools found</h3>
-              <p>Try adjusting your search or filter criteria</p>
+              <h3>{zh ? '未找到院校' : 'No schools found'}</h3>
+              <p>{zh ? '请调整搜索词或筛选条件' : 'Try adjusting your search or filter criteria'}</p>
             </div>
           ) : (
             <div className="grid grid-3">
@@ -155,8 +156,7 @@ export function SchoolsPage() {
                       marginTop: 8,
                     }}
                   >
-                    {getProgramCount(school.id)} active program
-                    {getProgramCount(school.id) !== 1 ? 's' : ''} in 2026
+                    {getProgramCount(school.id)} {zh ? '个活跃项目（2026）' : `active program${getProgramCount(school.id) !== 1 ? 's' : ''} in 2026`}
                   </div>
                 </div>
               ))}

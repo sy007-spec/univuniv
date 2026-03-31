@@ -1,5 +1,6 @@
 import type { Program } from '@/types'
 import { schools } from '@/data/schools'
+import { useI18n } from '@/i18n'
 
 interface ProgramCardProps {
   program: Program
@@ -27,6 +28,8 @@ function formatLocation(program: Program): string {
 }
 
 export function ProgramCard({ program }: ProgramCardProps) {
+  const { lang } = useI18n()
+  const zh = lang === 'zh'
   const school = schools.find((s) => s.id === program.schoolId)
 
   return (
@@ -40,12 +43,20 @@ export function ProgramCard({ program }: ProgramCardProps) {
       <div className="program-meta">
         <strong>{program.format}</strong>
         <br />
-        {formatLocation(program)}
+        {zh
+          ? formatLocation(program)
+              .replace('Domestic', '国内')
+              .replace('Overseas', '国外')
+          : formatLocation(program)}
       </div>
       <div className="program-meta">
         <strong>{formatTuition(program.tuitionPerYear, program.tuitionCurrency)}</strong>
         <br />
-        {program.subjectType === 'both' ? 'Arts & Science' : program.subjectType === 'science' ? 'Science' : 'Arts'}
+        {program.subjectType === 'both'
+          ? zh ? '文理兼收' : 'Arts & Science'
+          : program.subjectType === 'science'
+            ? zh ? '理科' : 'Science'
+            : zh ? '文科' : 'Arts'}
       </div>
       <div className="program-meta">
         {program.qsRanking && (
@@ -55,13 +66,13 @@ export function ProgramCard({ program }: ProgramCardProps) {
         )}
         {program.enrollmentQuota && (
           <div style={{ marginTop: 4 }}>
-            Quota: {program.enrollmentQuota}
+            {zh ? '名额' : 'Quota'}: {program.enrollmentQuota}
           </div>
         )}
       </div>
       <div className="tags" style={{ justifyContent: 'flex-end' }}>
-        {program.beforeGaokao && <span className="tag tag-success">Pre-Gaokao</span>}
-        {program.afterGaokao && <span className="tag tag-primary">Post-Gaokao</span>}
+        {program.beforeGaokao && <span className="tag tag-success">{zh ? '高考前' : 'Pre-Gaokao'}</span>}
+        {program.afterGaokao && <span className="tag tag-primary">{zh ? '高考后' : 'Post-Gaokao'}</span>}
       </div>
     </div>
   )

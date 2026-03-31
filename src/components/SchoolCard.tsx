@@ -1,4 +1,5 @@
 import type { School } from '@/types'
+import { useI18n } from '@/i18n'
 
 interface SchoolCardProps {
   school: School
@@ -12,6 +13,8 @@ function getQsBadgeClass(ranking?: number): string {
 }
 
 export function SchoolCard({ school }: SchoolCardProps) {
+  const { lang } = useI18n()
+  const zh = lang === 'zh'
   return (
     <div className="card">
       <div className="card-header">
@@ -36,7 +39,7 @@ export function SchoolCard({ school }: SchoolCardProps) {
         {school.isC9 && <span className="tag tag-warning">C9</span>}
         {school.is985 && <span className="tag tag-primary">985</span>}
         {school.is211 && <span className="tag tag-secondary">211</span>}
-        {school.isDoubleFirstClass && <span className="tag tag-success">Double First Class</span>}
+        {school.isDoubleFirstClass && <span className="tag tag-success">{zh ? '双一流' : 'Double First Class'}</span>}
         {school.tags
           .filter((t) => !['C9', '985', '211', 'Double First Class'].includes(t))
           .slice(0, 3)

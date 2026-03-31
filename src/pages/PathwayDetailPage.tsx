@@ -2,10 +2,12 @@ import { useParams, Link } from 'react-router-dom'
 import { pathways } from '@/data/pathways'
 import { programs } from '@/data/programs'
 import { schools } from '@/data/schools'
-import { PATHWAY_CATEGORY_LABELS } from '@/types'
 import { ProgramCard } from '@/components/ProgramCard'
+import { useI18n } from '@/i18n'
 
 export function PathwayDetailPage() {
+  const { lang, categoryLabel } = useI18n()
+  const zh = lang === 'zh'
   const { id } = useParams()
   const pathway = pathways.find((p) => p.id === id)
 
@@ -13,9 +15,9 @@ export function PathwayDetailPage() {
     return (
       <div className="section">
         <div className="container empty-state">
-          <h3>Pathway not found</h3>
+          <h3>{zh ? '未找到该路径' : 'Pathway not found'}</h3>
           <p>
-            <Link to="/pathways">← Back to all pathways</Link>
+            <Link to="/pathways">{zh ? '← 返回路径列表' : '← Back to all pathways'}</Link>
           </p>
         </div>
       </div>
@@ -34,7 +36,7 @@ export function PathwayDetailPage() {
       <section className="detail-hero">
         <div className="container">
           <div className="breadcrumb">
-            <Link to="/pathways">Pathways</Link>
+            <Link to="/pathways">{zh ? '升学路径' : 'Pathways'}</Link>
             <span>/</span>
             <span>{pathway.name}</span>
           </div>
@@ -46,16 +48,16 @@ export function PathwayDetailPage() {
           </p>
           <div className="tags" style={{ marginTop: 16 }}>
             <span className="tag tag-primary">
-              {PATHWAY_CATEGORY_LABELS[pathway.category]}
+              {categoryLabel(pathway.category)}
             </span>
             {pathway.eligibility.beforeGaokao && (
-              <span className="tag tag-success">Apply Before Gaokao</span>
+              <span className="tag tag-success">{zh ? '高考前可申报' : 'Apply Before Gaokao'}</span>
             )}
             {pathway.eligibility.afterGaokao && (
-              <span className="tag tag-primary">Apply After Gaokao</span>
+              <span className="tag tag-primary">{zh ? '高考后可申报' : 'Apply After Gaokao'}</span>
             )}
             {pathway.eligibility.freshGraduateOnly && (
-              <span className="tag tag-warning">Fresh Graduate Only</span>
+              <span className="tag tag-warning">{zh ? '仅限应届生' : 'Fresh Graduate Only'}</span>
             )}
           </div>
         </div>
@@ -66,12 +68,12 @@ export function PathwayDetailPage() {
           <div className="detail-grid">
             <div>
               <div className="detail-section">
-                <h2>Overview</h2>
+                <h2>{zh ? '路径概览' : 'Overview'}</h2>
                 <p>{pathway.detailedDescription}</p>
               </div>
 
               <div className="detail-section">
-                <h2>Advantages</h2>
+                <h2>{zh ? '优势' : 'Advantages'}</h2>
                 <ul className="detail-list">
                   {pathway.advantages.map((adv, i) => (
                     <li key={i}>{adv}</li>
@@ -80,7 +82,7 @@ export function PathwayDetailPage() {
               </div>
 
               <div className="detail-section">
-                <h2>Eligibility Requirements</h2>
+                <h2>{zh ? '报考条件' : 'Eligibility Requirements'}</h2>
                 <ul className="detail-list">
                   {pathway.eligibility.requirements.map((req, i) => (
                     <li key={i}>{req}</li>
@@ -90,7 +92,7 @@ export function PathwayDetailPage() {
 
               {relatedPrograms.length > 0 && (
                 <div className="detail-section">
-                  <h2>2026 Programs ({relatedPrograms.length})</h2>
+                  <h2>{zh ? `2026 项目（${relatedPrograms.length}）` : `2026 Programs (${relatedPrograms.length})`}</h2>
                   <div className="program-list">
                     {relatedPrograms.map((program) => (
                       <ProgramCard key={program.id} program={program} />
@@ -102,41 +104,41 @@ export function PathwayDetailPage() {
 
             <div className="detail-sidebar">
               <div className="sidebar-card">
-                <h3>Key Information</h3>
+                <h3>{zh ? '关键信息' : 'Key Information'}</h3>
                 <div className="info-row">
-                  <span className="info-label">Category</span>
+                  <span className="info-label">{zh ? '类别' : 'Category'}</span>
                   <span className="info-value">
-                    {PATHWAY_CATEGORY_LABELS[pathway.category]}
+                    {categoryLabel(pathway.category)}
                   </span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Before Gaokao</span>
+                  <span className="info-label">{zh ? '高考前' : 'Before Gaokao'}</span>
                   <span className="info-value">
-                    {pathway.eligibility.beforeGaokao ? 'Yes' : 'No'}
+                    {pathway.eligibility.beforeGaokao ? (zh ? '是' : 'Yes') : (zh ? '否' : 'No')}
                   </span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">After Gaokao</span>
+                  <span className="info-label">{zh ? '高考后' : 'After Gaokao'}</span>
                   <span className="info-value">
-                    {pathway.eligibility.afterGaokao ? 'Yes' : 'No'}
+                    {pathway.eligibility.afterGaokao ? (zh ? '是' : 'Yes') : (zh ? '否' : 'No')}
                   </span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Fresh Grad Only</span>
+                  <span className="info-label">{zh ? '仅应届生' : 'Fresh Grad Only'}</span>
                   <span className="info-value">
-                    {pathway.eligibility.freshGraduateOnly ? 'Yes' : 'No'}
+                    {pathway.eligibility.freshGraduateOnly ? (zh ? '是' : 'Yes') : (zh ? '否' : 'No')}
                   </span>
                 </div>
                 {pathway.successRate && (
                   <div className="info-row">
-                    <span className="info-label">Success Rate</span>
+                    <span className="info-label">{zh ? '成功率' : 'Success Rate'}</span>
                     <span className="info-value">{pathway.successRate}</span>
                   </div>
                 )}
               </div>
 
               <div className="sidebar-card">
-                <h3>Timeline</h3>
+                <h3>{zh ? '时间线' : 'Timeline'}</h3>
                 <p
                   style={{
                     fontSize: '0.9rem',
@@ -150,7 +152,7 @@ export function PathwayDetailPage() {
 
               {targetSchoolData.length > 0 && (
                 <div className="sidebar-card">
-                  <h3>Target Schools</h3>
+                  <h3>{zh ? '目标院校' : 'Target Schools'}</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {targetSchoolData.map((school) =>
                       school ? (

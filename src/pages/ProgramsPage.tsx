@@ -4,12 +4,15 @@ import { programs } from '@/data/programs'
 import { schools } from '@/data/schools'
 import { pathways } from '@/data/pathways'
 import { ProgramCard } from '@/components/ProgramCard'
+import { useI18n } from '@/i18n'
 import type { ProgramFormat } from '@/types'
 
 const YEARS = [2026, 2025]
 const FORMATS: ProgramFormat[] = ['4+0', '2+2', '3+1', '1+3', '4yr', '3yr', '5yr']
 
 export function ProgramsPage() {
+  const { lang } = useI18n()
+  const zh = lang === 'zh'
   const [searchParams] = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
 
@@ -112,10 +115,10 @@ export function ProgramsPage() {
       <section className="detail-hero">
         <div className="container">
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: 8 }}>
-            Programs
+            {zh ? '项目库' : 'Programs'}
           </h1>
           <p style={{ opacity: 0.8, fontSize: '1.1rem', maxWidth: 600 }}>
-            Browse and filter all available admission programs with precise data management by year
+            {zh ? '按年份精细管理并筛选全部升学项目' : 'Browse and filter all available admission programs by year'}
           </p>
         </div>
       </section>
@@ -126,17 +129,17 @@ export function ProgramsPage() {
             {/* Row 1: Search + Year + Pathway */}
             <div className="filter-row" style={{ marginBottom: 16 }}>
               <div className="filter-group" style={{ minWidth: 240 }}>
-                <label className="filter-label">Search</label>
+                <label className="filter-label">{zh ? '搜索' : 'Search'}</label>
                 <input
                   className="filter-input"
                   type="text"
-                  placeholder="School, major, program..."
+                  placeholder={zh ? '学校、专业、项目...' : 'School, major, program...'}
                   value={filters.searchQuery}
                   onChange={(e) => updateFilter('searchQuery', e.target.value)}
                 />
               </div>
               <div className="filter-group" style={{ minWidth: 120, flex: 0.5 }}>
-                <label className="filter-label">Year</label>
+                <label className="filter-label">{zh ? '年份' : 'Year'}</label>
                 <select
                   className="filter-select"
                   value={filters.year}
@@ -150,13 +153,13 @@ export function ProgramsPage() {
                 </select>
               </div>
               <div className="filter-group" style={{ minWidth: 160 }}>
-                <label className="filter-label">Pathway</label>
+                <label className="filter-label">{zh ? '路径' : 'Pathway'}</label>
                 <select
                   className="filter-select"
                   value={filters.pathwayId}
                   onChange={(e) => updateFilter('pathwayId', e.target.value)}
                 >
-                  <option value="">All Pathways</option>
+                  <option value="">{zh ? '全部路径' : 'All Pathways'}</option>
                   {pathways.map((pw) => (
                     <option key={pw.id} value={pw.id}>
                       {pw.name}
@@ -165,13 +168,13 @@ export function ProgramsPage() {
                 </select>
               </div>
               <div className="filter-group" style={{ minWidth: 160 }}>
-                <label className="filter-label">School</label>
+                <label className="filter-label">{zh ? '学校' : 'School'}</label>
                 <select
                   className="filter-select"
                   value={filters.schoolId}
                   onChange={(e) => updateFilter('schoolId', e.target.value)}
                 >
-                  <option value="">All Schools</option>
+                  <option value="">{zh ? '全部学校' : 'All Schools'}</option>
                   {schools.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.name}
@@ -330,20 +333,20 @@ export function ProgramsPage() {
               </div>
               <div className="filter-actions" style={{ marginLeft: 'auto' }}>
                 <button className="btn btn-sm btn-outline" onClick={resetFilters}>
-                  Reset Filters
+                  {zh ? '重置筛选' : 'Reset Filters'}
                 </button>
               </div>
             </div>
           </div>
 
           <div style={{ marginBottom: 16, fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
-            Showing <strong>{filteredPrograms.length}</strong> program{filteredPrograms.length !== 1 ? 's' : ''}
+            {zh ? '共找到' : 'Showing'} <strong>{filteredPrograms.length}</strong> {zh ? '个项目' : `program${filteredPrograms.length !== 1 ? 's' : ''}`}
           </div>
 
           {filteredPrograms.length === 0 ? (
             <div className="empty-state">
-              <h3>No programs found</h3>
-              <p>Try adjusting your filters to see more results</p>
+              <h3>{zh ? '未找到项目' : 'No programs found'}</h3>
+              <p>{zh ? '请调整筛选条件' : 'Try adjusting your filters to see more results'}</p>
             </div>
           ) : (
             <div className="program-list">

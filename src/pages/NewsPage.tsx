@@ -2,10 +2,13 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { newsItems } from '@/data/news'
 import { pathways } from '@/data/pathways'
+import { useI18n } from '@/i18n'
 
 const CATEGORIES = [...new Set(newsItems.map((n) => n.category))]
 
 export function NewsPage() {
+  const { lang } = useI18n()
+  const zh = lang === 'zh'
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -29,11 +32,10 @@ export function NewsPage() {
       <section className="detail-hero">
         <div className="container">
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: 8 }}>
-            News & Updates
+            {zh ? '资讯更新' : 'News & Updates'}
           </h1>
           <p style={{ opacity: 0.8, fontSize: '1.1rem', maxWidth: 600 }}>
-            Stay updated with the latest admission policies, program launches, and
-            important deadlines
+            {zh ? '追踪最新升学政策、项目发布与关键时间节点' : 'Stay updated with policies, launches, and deadlines'}
           </p>
         </div>
       </section>
@@ -43,23 +45,23 @@ export function NewsPage() {
           <div className="filter-bar">
             <div className="filter-row">
               <div className="filter-group" style={{ minWidth: 240 }}>
-                <label className="filter-label">Search</label>
+                <label className="filter-label">{zh ? '搜索' : 'Search'}</label>
                 <input
                   className="filter-input"
                   type="text"
-                  placeholder="Search news..."
+                  placeholder={zh ? '搜索资讯...' : 'Search news...'}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="filter-group" style={{ minWidth: 180 }}>
-                <label className="filter-label">Category</label>
+                <label className="filter-label">{zh ? '类别' : 'Category'}</label>
                 <select
                   className="filter-select"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
-                  <option value="all">All Categories</option>
+                  <option value="all">{zh ? '全部类别' : 'All Categories'}</option>
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
@@ -72,8 +74,8 @@ export function NewsPage() {
 
           {filteredNews.length === 0 ? (
             <div className="empty-state">
-              <h3>No news found</h3>
-              <p>Try adjusting your search or filter criteria</p>
+              <h3>{zh ? '未找到资讯' : 'No news found'}</h3>
+              <p>{zh ? '请调整搜索词或筛选条件' : 'Try adjusting your search or filter criteria'}</p>
             </div>
           ) : (
             <div>
@@ -99,7 +101,7 @@ export function NewsPage() {
                             color: 'var(--color-text-muted)',
                           }}
                         >
-                          Source: {item.source}
+                          {zh ? '来源' : 'Source'}: {item.source}
                         </span>
                       )}
                     </div>
@@ -111,7 +113,7 @@ export function NewsPage() {
                           to={`/pathways/${relatedPathway.id}`}
                           className="btn btn-sm btn-outline"
                         >
-                          Related: {relatedPathway.name} →
+                          {zh ? '相关路径' : 'Related'}: {relatedPathway.name} →
                         </Link>
                       </div>
                     )}
